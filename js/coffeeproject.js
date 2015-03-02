@@ -29,9 +29,9 @@
 			var model = this.props.model;
 			console.log(model)
 			return z('div.wrapper', [
-						z('div.header'),
-						z('div.map'),
-						z('div.list')
+						z('div.header', model.get('name')),
+						z('div.map', model.get('project')),
+						z('div.list', 'this is just going to be a filler to see if this div will show')
 					])
 		}
 	})
