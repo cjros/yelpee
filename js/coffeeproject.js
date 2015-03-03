@@ -32,6 +32,12 @@
 		}
 	})
 
+	var Mapify = React.createClass({
+		render: function(){
+			return z()
+		}
+	})
+
 	Backbone.LandingView = React.createClass({
 		render: function(){
 			var model = this.props.model;
