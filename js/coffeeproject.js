@@ -1,9 +1,26 @@
 ;(function(exports){
 	'use strict';
 
+	var collectionData = [{
+		name: "Catalina",
+		address: "123 Fake St",
+		photo_url: "http://i.imgur.com/z2eifSm.jpg",
+		rating: 10
+	},{
+		name: "Tout Suite",
+		address: "123 Fake St",
+		photo_url: "http://i.imgur.com/z2eifSm.jpg",
+		raiting: 10
+	}];
+
 	Backbone.CSRouter = Backbone.Router.extend({
 		initialize: function(){
 			this.container = document.querySelector('.container');
+			// this.collection = new Backbone.CoffeeShopList();
+
+			//incorporating collection
+			// this.firstPage = z(Backbone.LandingView, {collection: this.collection});
+
 			Backbone.history.start();
 		},
 		routes: {
@@ -27,9 +44,16 @@
 		}
 	});
 
+	Backbone.CoffeeShopList = Backbone.Collection.extend({
+        model: Backbone.CoffeeShop
+        // url: 'http://coffeesnob-api.herokuapp.com/api/shops'
+    })
+
 	Backbone.CoffeeShop = Backbone.Model.extend({
 		url: function(){
+			
 			return this.get('shops_url')
+
 		},
 		defaults: {
 			name: "chris",
