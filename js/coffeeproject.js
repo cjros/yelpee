@@ -7,7 +7,8 @@
 			Backbone.history.start();
 		},
 		routes: {
-			'*default': 'home'
+			'*default': 'home',
+			'/login': 'login'
 		},
 		home: function(){
 			var self = this;
@@ -19,6 +20,10 @@
 				console.log(data)
 				React.render(self.firstPage, self.container);
 			})
+		},
+		login: function(){
+			this.loginPage = z(Backbone.LoginView, {model: this.props.model})
+			React.render(this.loginPage, this.container);
 		}
 	});
 
@@ -58,6 +63,20 @@
 						z('div.map', model.get('shops')[0].id),
 						z('div.list', 'this is just going to be a filler to see if this div will show')
 					])
+		}
+	});
+
+	Backbone.LoginView = React.createClass({
+		render: function(){
+			return z('div.login-wrapper', [
+				z('div.form-wrapper', [
+					z('form.login-info', [
+						z('input:text@username'),
+						z('input:password@password'),
+						z('button', 'LOGIN')
+					])
+				])
+			])
 		}
 	})
 	
