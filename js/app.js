@@ -39,7 +39,7 @@ function app(){
 
         document.querySelector("html").style.opacity = 1;
         // start app?
-        new Backbone.CoffeeProject();
+        new Backbone.CSRouter();
     })
 
 }
