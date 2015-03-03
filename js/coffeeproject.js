@@ -16,7 +16,7 @@
 	Backbone.CSRouter = Backbone.Router.extend({
 		initialize: function(){
 			this.container = document.querySelector('.container');
-			// this.collection = new Backbone.CoffeeShopList();
+			this.collection = new Backbone.CoffeeShopList();
 
 			//incorporating collection
 			// this.firstPage = z(Backbone.LandingView, {collection: this.collection});
@@ -30,12 +30,12 @@
 		home: function(){
 			var self = this;
 			console.log('hi');
-			this.model = new Backbone.CoffeeShop( {shops_url: 'http://coffeesnob-api.herokuapp.com/api/shops'}); // the model
-			this.firstPage = z(Backbone.LandingView, {model: this.model}); //might need to put into a promise if errors in the future
+			// this.model = new Backbone.CoffeeShop(); // the model
+			// this.firstPage = z(Backbone.LandingView, {model: this.model}); //might need to put into a promise if errors in the future
 
-			this.model.fetch().then(function(data){
+			this.collection.fetch().then(function(data){
 				console.log(data)
-				React.render(self.firstPage, self.container);
+				// React.render(self.firstPage, self.container);
 			})
 		},
 		login: function(){
@@ -44,22 +44,20 @@
 		}
 	});
 
-	Backbone.CoffeeShopList = Backbone.Collection.extend({
-        model: Backbone.CoffeeShop
-        // url: 'http://coffeesnob-api.herokuapp.com/api/shops'
-    })
-
 	Backbone.CoffeeShop = Backbone.Model.extend({
 		url: function(){
-			
-			return this.get('shops_url')
-
+			return "http://coffeesnob-api.herokuapp.com/api/shops/"+this.id
 		},
 		defaults: {
 			name: "chris",
 			project: 'coffeesnob'
 		}
 	})
+
+	Backbone.CoffeeShopList = Backbone.Collection.extend({
+        model: Backbone.CoffeeShop,
+        url: 'http://coffeesnob-api.herokuapp.com/api/shops'
+    })
 
 	var Mapify = React.createClass({
 		render: function(){
