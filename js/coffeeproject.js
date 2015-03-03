@@ -7,8 +7,8 @@
 			Backbone.history.start();
 		},
 		routes: {
-			'*default': 'home',
-			'/login': 'login'
+			'*default': 'home'
+			// '/login': 'login'
 		},
 		home: function(){
 			var self = this;
@@ -22,8 +22,8 @@
 			})
 		},
 		login: function(){
-			this.loginPage = z(Backbone.LoginView, {model: this.props.model})
-			React.render(this.loginPage, this.container);
+		// 	this.loginPage = z(Backbone.LoginView, {model: this.props.model})
+		// 	React.render(this.loginPage, this.container);
 		}
 	});
 
@@ -46,6 +46,7 @@
 	Backbone.LandingView = React.createClass({
 		render: function(){
 			var model = this.props.model;
+			var arr = ['hi', 'hello', 'sup', 'bye']
 			// debugger;
 			console.log(model)
 			return z('div.wrapper', [
@@ -61,19 +62,24 @@
 							])
 						]),
 						z('div.map', model.get('shops')[0].id),
-						z('div.list', 'this is just going to be a filler to see if this div will show')
+						arr.map(function(model){
+							return z('div#'+model, model)
+						})
 					])
 		}
 	});
 
 	Backbone.LoginView = React.createClass({
+		_test: function() {
+			console.log(arguments)
+		},
 		render: function(){
 			return z('div.login-wrapper', [
 				z('div.form-wrapper', [
 					z('form.login-info', [
 						z('input:text@username'),
 						z('input:password@password'),
-						z('button', 'LOGIN')
+						z('button', {onSubmit: this._test},'LOGIN')
 					])
 				])
 			])
