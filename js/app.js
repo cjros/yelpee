@@ -27,6 +27,7 @@ function app(){
 
         // other stuff
         {url: "./bower_components/pace/pace.min.js"},
+        // {url: "//maps.googleapis.com/maps/api/js?key=AIzaSyAZDjMzMY8J9tWq9hbO63UMqc0Msf9dWbM"},
         // {url: "./js/TemplateView.js"},
         {url: './js/coffeeproject.js'}
     ).then(function(){
