@@ -58,12 +58,11 @@
         }
     })
 
-    Backbone.CoffeeShopComments = Backbone.Model.extend({
+    Backbone.CoffeeShopComment = Backbone.Model.extend({
         url: function() {
-            return "http://coffeesnob-api.herokuapp.com/api/shops/" + this.get('shop_id') + "/comments"
+            return "http://coffeesnob-api.herokuapp.com/api/shops/" + this.shop_id + "/comments"
         },
         defaults: {
-            shop_id: 1,
             message: "No Comment."
         }
     })
