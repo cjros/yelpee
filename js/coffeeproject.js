@@ -58,12 +58,11 @@
         }
     })
 
-    Backbone.CoffeeShopComments = Backbone.Model.extend({
+    Backbone.CoffeeShopComment = Backbone.Model.extend({
         url: function() {
-            return "http://coffeesnob-api.herokuapp.com/api/shops/" + this.get('shop_id')
+            return "http://coffeesnob-api.herokuapp.com/api/shops/" + this.shop_id + "/comments"
         },
         defaults: {
-            shop_id: 1,
             message: "No Comment."
         }
     })
@@ -106,8 +105,7 @@
                     this.props.collection.models[0].attributes.shops.map(function(i) {
                         console.log(i.name);
                         return z('li#' + i.id, i.name);
-                    }))]
-                )
+                    }))])
             ])
         }
     });
