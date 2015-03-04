@@ -46,11 +46,20 @@
 
 	Backbone.CoffeeShop = Backbone.Model.extend({
 		url: function(){
-			return "http://coffeesnob-api.herokuapp.com/api/shops/"+this.id
+			return "http://coffeesnob-api.herokuapp.com/api/shops/"
 		},
 		defaults: {
-			name: "chris",
-			project: 'coffeesnob'
+			name: "no name"
+		}
+	})
+
+	Backbone.CoffeeShopComments = Backbone.Model.extend({
+		url: function(){
+			return "http://coffeesnob-api.herokuapp.com/api/shops/"+this.get('shop_id')
+		},
+		defaults: {
+			shop_id: 1,
+			message: "No Comment."
 		}
 	})
 
