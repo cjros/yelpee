@@ -60,7 +60,7 @@
 
     Backbone.CoffeeShopComments = Backbone.Model.extend({
         url: function() {
-            return "http://coffeesnob-api.herokuapp.com/api/shops/" + this.get('shop_id')
+            return "http://coffeesnob-api.herokuapp.com/api/shops/" + this.get('shop_id') + "/comments"
         },
         defaults: {
             shop_id: 1,
@@ -105,9 +105,16 @@
                 z('div.main', [z('ol', [
                     this.props.collection.models[0].attributes.shops.map(function(i) {
                         console.log(i.name);
-                        	return z('li#' + i.id, [
-                        		z('p.namez', i.name),
-                        		z('span.desc', 'Description: testing a hardcoded description for each model(shop)')
+                        	return z('li#' + i.id+".shops", [
+                        		z('img.'+i.id+'[src=./images/catalina-coffee.jpg]'),
+                        		z('div.info-container', [
+                        			z('div.shop_name', i.name),
+                        			z('div.rating', [
+                        				z('span.stars', "4"),
+                        				z('i.fa.fa-star')
+                        			]),
+                        			z('pre.address', 'Address\n2201 Washington Ave\nHouston, TX 77007\nUnited States')
+                        		])
                         	])
                         
                     })])]

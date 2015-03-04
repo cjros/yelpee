@@ -1,6 +1,7 @@
 @import "../bower_components/normalize-scss/_normalize.scss";
 @import "../bower_components/typeplate-starter-kit/css/_typeplate.scss";
 @import "./mixins.scss";
+@import "../bower_components/font-awesome/css/font-awesome.min.css";
 
 /**
  * BOX-SIZING
@@ -79,8 +80,8 @@ body {
     width: 100%;
     height: 100%;
     margin: 0;
-    // font-family: 'Open Sans', sans-serif;
-    font-family: 'Lobster', cursive;
+    font-family: 'Open Sans', sans-serif;
+    // font-family: 'Lobster', cursive;
 }
 .container {
     width: 100%;
@@ -90,6 +91,7 @@ body {
     background-color: brown;
     color: white;
     box-shadow: 0px 3px 10px #aaa;
+    font-family: 'Lobster', cursive;
 }
 ul {
     position: relative;
@@ -116,4 +118,30 @@ ul > * {
     background-color: #eee;
     margin: 0 auto;
     box-shadow: 0px 3px 10px #aaa;
+    // padding: .5em;
 }
+.shops {
+    box-shadow: 0px 3px 10px #aaa;
+    padding: .5em;
+}
+.info-container {
+    font-size: 1.75em;
+    display: inline-block;
+    vertical-align: top;
+    padding: .5em;
+    font-weight: bold;
+    animation: fadeIn 2s ease;
+    & > .address {
+        font-size: 1rem;;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
