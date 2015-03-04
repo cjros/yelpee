@@ -102,11 +102,11 @@
                     ])
                 ]),
                 // z('div.map', model.get('shops')[0].id),
-                z('ol',
+                z('div.main', [z('ol',
                     this.props.collection.models[0].attributes.shops.map(function(i) {
-                    	console.log(i.name);
+                        console.log(i.name);
                         return z('li#' + i.id, i.name);
-                    })
+                    }))]
                 )
             ])
         }
