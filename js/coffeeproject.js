@@ -102,11 +102,15 @@
                     ])
                 ]),
                 // z('div.map', model.get('shops')[0].id),
-                z('div.main', [z('ol',
+                z('div.main', [z('ol', [
                     this.props.collection.models[0].attributes.shops.map(function(i) {
                         console.log(i.name);
-                        return z('li#' + i.id, i.name);
-                    }))]
+                        	return z('li#' + i.id, [
+                        		z('p.namez', i.name),
+                        		z('span.desc', 'Description: testing a hardcoded description for each model(shop)')
+                        	])
+                        
+                    })])]
                 )
             ])
         }
