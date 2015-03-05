@@ -24,10 +24,10 @@
                 React.render(self.homePage, self.container);
             })
         },
-        shopper: function(id){
-            // debugger;
+        shopper: function(shop_id){
             var self = this;
-            this.commentsCollection = new Backbone.CoffeeShopCommentList({ shop_id: id});
+            this.commentsCollection = new Backbone.CoffeeShopCommentList();
+            this.commentsCollection.shop_id = shop_id;
             this.detailPage = z(Backbone.DetailView, {collection: this.commentsCollection})
 
             this.commentsCollection.fetch().then(function(data){
@@ -51,26 +51,16 @@
     });
 
     Backbone.CoffeeShopComment = Backbone.Model.extend({
-        url: function() {
-            //CHRIS' CODE FROM THE LAST PULL, this one line below is what i 'updated'
-            return "http://coffeesnob-api.herokuapp.com/api/shops/" + this.shop_id + "/comments/"
-            ///END OF CHRIS' SECTION
-
-            ////////////////@Michael's CODE FROM LAST PULL
-        	//debugger;
-            //return "http://coffeesnob-api.herokuapp.com/api/shops/" + this.get("shop_id") + "/comments"
-            //},
-            //defaults: {
-            //message: "No Comment."
-            ////////////////END OF SECTION
-
-        }
+        
     });
     /* comments collection */
     Backbone.CoffeeShopCommentList = Backbone.Collection.extend({
         model: Backbone.CoffeeShopComment,
         url: function() {
-            return 'http://coffeesnob-api.herokuapp.com/api/shops/' + this.shop_id + '/comments/'
+            return 'http://coffeesnob-api.herokuapp.com/api/shops/'+this.shop_id+'/comments/'
+        },
+        parse: function(data){
+            return data.comments;
         }
     });
 
@@ -93,7 +83,7 @@
             this.props.collection && this.props.collection.off("change reset add remove")
         },
         render: function() {
-            console.log(this.props.collection.models)
+            console.log(this.props.collection)
             return z('div.wrapper', [
                 z('div.header', [
                     z('div.nav', [
@@ -108,17 +98,20 @@
                 ]),
                 z('div.main', [z('ol', [
                     this.props.collection.models[0].attributes.shops.map(function(i) {
-                        console.log(i.name);
+                        // console.log(i.name);
                         	return z('a[href=#'+i.id+']', [
                                 z('li#' + i.id+".shops", [
-                        		z('img.'+i.id+'[src=./images/catalina-coffee.jpg]'),
+                        		z('img.'+i.id+(i.photo.photo.medium.url ? '[src='+i.photo.photo.medium.url+']' : '[alt='+i.name+']')),
                         		z('div.info-container', [
                         			z('div.shop_name', i.name),
                         			z('div.rating', [
-                        				z('span.stars', "4"),
+                        				z('span.stars', i.rating),
                         				z('i.fa.fa-star')
                         			]),
-                        			z('pre.address', 'Address:\n2201 Washington Ave\nHouston, TX 77007\nUnited States')
+                                    z('div.hours', 'Business Hours:' + i.hours),
+                                    z('div.website', i.website),
+                                    z('div.shop-desc', i.description),
+                        			z('pre.address', 'Address:\n'+ i.address + "\n" + i.city + "\n" + i.state + "\n" + i.zip)
                         		])
                         	])
                         ])
@@ -139,59 +132,63 @@
         },
         componentWillMount: function() { //what happens when the object is attached to the dom similar to initialize
             var self = this;
-            this.props.collection && this.props.collection.on("change reset add remove sync", function() {
+            this.props.collection && this.props.collection.on("change reset add remove", function() {
                 self.forceUpdate() //setup listener and then force update on collection change
             })
         },
-        componentWillUnmount: function() {
-            this.props.collection && this.props.collection.off("change reset add remove")
-        },
+        // componentWillUnmount: function() {
+        //     this.props.collection && this.props.collection.off("change reset add remove")
+        // },
         _addComment: function(e){
             e.preventDefault();
-            debugger;
+            // debugger;
+            console.log(this.props)
             var comment = this.refs.addComment.getDOMNode().value;
-            //the one line below this comment shouldn't be needed; was used for testing hardcode data;
-            //routing should be taking
-            //care of the shop_id when a shop model is clicked for comments with
-            //the corresponding id in the first place...
-            var shopId = this.props.collection.models[0].attributes.comments[0].shop_id
             var data = {
-                shop_id: shopId,
                 message: comment
             }
-            var newComment = new Backbone.CoffeeShopComment(data)
-            var self = this;
-            newComment.save().then(function(){
-                //WHY ISNT THIS SHIT RE-RENDERING?
-                //comment actually gets added but dev tools shows an error
-                //must manually refresh for the comment to even show
 
-                //EDIT: SHIT ISNT EVEN POSTING ANYMORE
-                self.props.collection.fetch()
-            })
+            var self = this;
+            this.props.collection.create(data)
+        
+
+
+            // var newComment = new Backbone.CoffeeShopComment(data)
+
+            // var self = this;
+            // newComment.save().then(function(){
+            //     //WHY ISNT THIS SHIT RE-RENDERING?
+            //     //comment actually gets added but dev tools shows an error
+            //     //must manually refresh for the comment to even show
+
+            //     //EDIT: SHIT ISNT EVEN POSTING ANYMORE
+            //     self.props.collection.fetch()
+            // })
         },
         render: function() {
-            console.log(this.props.collection)
             return z('div.wrapper', [
                 z('div.main', [
                     z('div.shop-details', 'INFO goes here'),
                     z('div.map', 'a map should be here'),
-                    z('form.comment-box', {onSubmit: this._addComment}, [
+                    z('form.comment-box', {
+                        onSubmit: this._addComment
+                    }, [
                         z('input:text@addComment[placeholder=add a new comment]'),
                         z('button', 'submit!')
                     ]),
                     z('ol', [
-                    this.props.collection.models[0].attributes.comments.map(function(i) {
-                        console.log(i);
+                        this.props.collection.map(function(i) {
                             return z('li#' + i.id, [
                                 z('div.info-container', [
-                                    z('div.shop_name', i.message)
+                                    z('div.shop_name', i.get('message'))
                                 ])
                             ])
-                        
-                    })])]
-                )
+
+                        })
+                    ])
+                ])
             ])
+
         }
     });
 
