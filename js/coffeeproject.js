@@ -60,7 +60,8 @@
 
     Backbone.CoffeeShopComment = Backbone.Model.extend({
         url: function() {
-            return "http://coffeesnob-api.herokuapp.com/api/shops/" + this.shop_id + "/comments"
+        	debugger;
+            return "http://coffeesnob-api.herokuapp.com/api/shops/" + this.get("shop_id") + "/comments"
         },
         defaults: {
             message: "No Comment."
