@@ -51,7 +51,9 @@
     });
 
     Backbone.CoffeeShopComment = Backbone.Model.extend({
-        
+        url: function() {
+            return ' http://coffeesnob-api.herokuapp.com/api/shops/'+this.collection.shop_id+'/comments/'
+        }
     });
     /* comments collection */
     Backbone.CoffeeShopCommentList = Backbone.Collection.extend({
