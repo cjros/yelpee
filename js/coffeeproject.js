@@ -73,12 +73,6 @@
         url: 'http://coffeesnob-api.herokuapp.com/api/shops'
     })
 
-    var Mapify = React.createClass({
-        render: function() {
-            return z()
-        }
-    })
-
     Backbone.LandingView = React.createClass({
         componentWillMount: function() { //what happens when the object is attached to the dom similar to initialize
             var self = this;
@@ -113,7 +107,7 @@
                         				z('span.stars', "4"),
                         				z('i.fa.fa-star')
                         			]),
-                        			z('pre.address', 'Address\n2201 Washington Ave\nHouston, TX 77007\nUnited States')
+                        			z('pre.address', 'Address:\n2201 Washington Ave\nHouston, TX 77007\nUnited States')
                         		])
                         	])
                         
