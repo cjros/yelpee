@@ -2,86 +2,87 @@
 (function(exports) {
     'use strict';
 
-    var collectionData = [{
-        name: "Catalina",
-        address: "123 Fake St",
-        photo_url: "http://i.imgur.com/z2eifSm.jpg",
-        rating: 10
-    }, {
-        name: "Tout Suite",
-        address: "123 Fake St",
-        photo_url: "http://i.imgur.com/z2eifSm.jpg",
-        raiting: 10
-    }];
-
     Backbone.CSRouter = Backbone.Router.extend({
         initialize: function() {
             this.container = document.querySelector('.container');
-            this.collection = new Backbone.CoffeeShopList();
-
-            this.homePage = z(Backbone.LandingView, {
-                collection: this.collection
-            });
-
-            //incorporating collection
-            // this.firstPage = z(Backbone.LandingView, {collection: this.collection});
 
             Backbone.history.start();
         },
         routes: {
+            ':id': 'shopper',
             '*default': 'home'
-                // '/login': 'login'
         },
         home: function() {
+            console.log('home')
             var self = this;
-            console.log('hi');
-            // this.model = new Backbone.CoffeeShop(); // the model
-            // this.firstPage = z(Backbone.LandingView, {model: this.model}); //might need to put into a promise if errors in the future
+            this.shopsCollection = new Backbone.CoffeeShopList();
+            this.homePage = z(Backbone.LandingView, {
+                collection: this.shopsCollection
+            });
 
-            this.collection.fetch().then(function(data) {
-                console.log(data)
+            this.shopsCollection.fetch().then(function(data) {
                 React.render(self.homePage, self.container);
             })
         },
-        login: function() {
-            // 	this.loginPage = z(Backbone.LoginView, {model: this.props.model})
-            // 	React.render(this.loginPage, this.container);
+        shopper: function(id){
+            // debugger;
+            var self = this;
+            this.commentsCollection = new Backbone.CoffeeShopCommentList({ shop_id: id});
+            this.detailPage = z(Backbone.DetailView, {collection: this.commentsCollection})
+
+            this.commentsCollection.fetch().then(function(data){
+                // debugger;
+                React.render(self.detailPage, self.container)
+            })
         }
     });
 
     Backbone.CoffeeShop = Backbone.Model.extend({
-        url: function() {
-            return "http://coffeesnob-api.herokuapp.com/api/shops/"
-        },
-        defaults: {
-            name: "no name"
-        }
+        // url: function() {
+        //     return "http://coffeesnob-api.herokuapp.com/api/shops/" //+ 1
+        // }
     })
+    /* shops collection */
+    Backbone.CoffeeShopList = Backbone.Collection.extend({
+        model: Backbone.CoffeeShop,
+        url: function() {
+            return 'http://coffeesnob-api.herokuapp.com/api/shops'
+        }
+    });
 
     Backbone.CoffeeShopComment = Backbone.Model.extend({
         url: function() {
-            return "http://coffeesnob-api.herokuapp.com/api/shops/" + this.shop_id + "/comments"
-        },
-        defaults: {
-            message: "No Comment."
+            return "http://coffeesnob-api.herokuapp.com/api/shops/" + this.shop_id + "/comments/"
         }
-    })
-
-    Backbone.CoffeeShopList = Backbone.Collection.extend({
-        model: Backbone.CoffeeShop,
-        url: 'http://coffeesnob-api.herokuapp.com/api/shops'
-    })
+    });
+    /* comments collection */
+    Backbone.CoffeeShopCommentList = Backbone.Collection.extend({
+        model: Backbone.CoffeeShopComment,
+        url: function() {
+            return 'http://coffeesnob-api.herokuapp.com/api/shops/' + this.shop_id + '/comments/'
+        }
+    });
 
     Backbone.LandingView = React.createClass({
+        getInitialState: function() {
+            return {}
+        },
+        getDefaultProps: function() {
+            return {
+                collection: null
+            };
+        },
         componentWillMount: function() { //what happens when the object is attached to the dom similar to initialize
             var self = this;
             this.props.collection && this.props.collection.on("change reset add remove", function() {
                 self.forceUpdate() //setup listener and then force update on collection change
             })
         },
+        componentWillUnmount: function() {
+            this.props.collection && this.props.collection.off("change reset add remove")
+        },
         render: function() {
-            var model = this.props.model;
-            console.log(model)
+            console.log(this.props.collection.models)
             return z('div.wrapper', [
                 z('div.header', [
                     z('div.nav', [
@@ -94,11 +95,11 @@
                         ])
                     ])
                 ]),
-                // z('div.map', model.get('shops')[0].id),
                 z('div.main', [z('ol', [
                     this.props.collection.models[0].attributes.shops.map(function(i) {
                         console.log(i.name);
-                        	return z('li#' + i.id+".shops", [
+                        	return z('a[href=#'+i.id+']', [
+                                z('li#' + i.id+".shops", [
                         		z('img.'+i.id+'[src=./images/catalina-coffee.jpg]'),
                         		z('div.info-container', [
                         			z('div.shop_name', i.name),
@@ -109,6 +110,73 @@
                         			z('pre.address', 'Address:\n2201 Washington Ave\nHouston, TX 77007\nUnited States')
                         		])
                         	])
+                        ])
+                    })])]
+                )
+            ])
+        }
+    });
+
+    Backbone.DetailView = React.createClass({
+        getInitialState: function() {
+            return {}
+        },
+        getDefaultProps: function() {
+            return {
+                collection: null
+            };
+        },
+        componentWillMount: function() { //what happens when the object is attached to the dom similar to initialize
+            var self = this;
+            this.props.collection && this.props.collection.on("change reset add remove sync", function() {
+                self.forceUpdate() //setup listener and then force update on collection change
+            })
+        },
+        componentWillUnmount: function() {
+            this.props.collection && this.props.collection.off("change reset add remove")
+        },
+        _addComment: function(e){
+            e.preventDefault();
+            debugger;
+            var comment = this.refs.addComment.getDOMNode().value;
+            //the one line below this comment shouldn't be needed; was used for testing hardcode data;
+            //routing should be taking
+            //care of the shop_id when a shop model is clicked for comments with
+            //the corresponding id in the first place...
+            var shopId = this.props.collection.models[0].attributes.comments[0].shop_id
+            var data = {
+                shop_id: shopId,
+                message: comment
+            }
+            var newComment = new Backbone.CoffeeShopComment(data)
+            var self = this;
+            newComment.save().then(function(){
+                //WHY ISNT THIS SHIT RE-RENDERING?
+                //comment actually gets added but dev tools shows an error
+                //must manually refresh for the comment to even show
+
+                //EDIT: SHIT ISNT EVEN POSTING ANYMORE
+                self.props.collection.fetch()
+            })
+        },
+        render: function() {
+            console.log(this.props.collection)
+            return z('div.wrapper', [
+                z('div.main', [
+                    z('div.shop-details', 'INFO goes here'),
+                    z('div.map', 'a map should be here'),
+                    z('form.comment-box', {onSubmit: this._addComment}, [
+                        z('input:text@addComment[placeholder=add a new comment]'),
+                        z('button', 'submit!')
+                    ]),
+                    z('ol', [
+                    this.props.collection.models[0].attributes.comments.map(function(i) {
+                        console.log(i);
+                            return z('li#' + i.id, [
+                                z('div.info-container', [
+                                    z('div.shop_name', i.message)
+                                ])
+                            ])
                         
                     })])]
                 )
@@ -116,23 +184,5 @@
         }
     });
 
-    Backbone.LoginView = React.createClass({
-        _test: function() {
-            console.log(arguments)
-        },
-        render: function() {
-            return z('div.login-wrapper', [
-                z('div.form-wrapper', [
-                    z('form.login-info', [
-                        z('input:text@username'),
-                        z('input:password@password'),
-                        z('button', {
-                            onSubmit: this._test
-                        }, 'LOGIN')
-                    ])
-                ])
-            ])
-        }
-    })
 
 })(typeof module === 'object' ? module.exports : window)
