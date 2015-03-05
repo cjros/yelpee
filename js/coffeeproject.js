@@ -9,7 +9,7 @@
             Backbone.history.start();
         },
         routes: {
-            ':id': 'shopper',
+            ':shop_id': 'shopper',
             '*default': 'home'
         },
         home: function() {
