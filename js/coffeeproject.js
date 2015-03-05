@@ -59,9 +59,11 @@
     Backbone.CoffeeShopCommentList = Backbone.Collection.extend({
         model: Backbone.CoffeeShopComment,
         url: function() {
+            debugger;
             return 'http://coffeesnob-api.herokuapp.com/api/shops/'+this.shop_id+'/comments/'
         },
         parse: function(data){
+            debugger;
             return data.comments;
         }
     });
@@ -110,10 +112,10 @@
                         				z('span.stars', i.rating),
                         				z('i.fa.fa-star')
                         			]),
-                                    z('div.hours', 'Business Hours:' + i.hours),
+                                    z('div.hours', 'Business Hours: ' + i.hours),
                                     z('div.website', i.website),
                                     z('div.shop-desc', i.description),
-                        			z('pre.address', 'Address:\n'+ i.address + "\n" + i.city + "\n" + i.state + "\n" + i.zip)
+                        			z('pre.address', 'Address:\n'+ i.address + "\n" + i.city + "," + i.state +" " + i.zip)
                         		])
                         	])
                         ])
@@ -138,9 +140,9 @@
                 self.forceUpdate() //setup listener and then force update on collection change
             })
         },
-        // componentWillUnmount: function() {
-        //     this.props.collection && this.props.collection.off("change reset add remove")
-        // },
+        componentWillUnmount: function() {
+            this.props.collection && this.props.collection.off("change reset add remove")
+        },
         _addComment: function(e){
             e.preventDefault();
             // debugger;
