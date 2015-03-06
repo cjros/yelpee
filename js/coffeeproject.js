@@ -2,6 +2,10 @@
 (function(exports) {
     'use strict';
 
+    Math.clamp = function(value, floor, ceil){
+    	return Math.min(ceil, Math.max(floor, value))
+    }
+
     var collectionData = [{
         name: "Catalina",
         address: "123 Fake St",
@@ -60,7 +64,7 @@
 
     Backbone.CoffeeShopComment = Backbone.Model.extend({
         url: function() {
-        	debugger;
+            debugger;
             return "http://coffeesnob-api.herokuapp.com/api/shops/" + this.get("shop_id") + "/comments"
         },
         defaults: {
@@ -96,23 +100,46 @@
                     ])
                 ]),
                 // z('div.map', model.get('shops')[0].id),
-                z('div.main', [z('ol', [
+                z('div.main', [
+                    z('div.spacer', ''),
                     this.props.collection.models[0].attributes.shops.map(function(i) {
-                        console.log(i.name);
-                        	return z('li#' + i.id+".shops", [
-                        		z('img.'+i.id+'[src=./images/catalina-coffee.jpg]'),
-                        		z('div.info-container', [
-                        			z('div.shop_name', i.name),
-                        			z('div.rating', [
-                        				z('span.stars', "4"),
-                        				z('i.fa.fa-star')
-                        			]),
-                        			z('pre.address', 'Address:\n2201 Washington Ave\nHouston, TX 77007\nUnited States')
-                        		])
-                        	])
-                        
-                    })])]
-                )
+                    	// debugger;
+                    	var stars = new Array(Math.clamp(i.rating, 0, 5)).join(',').split(',').map(function(v, i){
+	                    		return z('i.fa.fa-coffee', {key: Math.random()})
+	                    	}),
+                    		nonstars = (5 - stars.length) ? 
+                    			new Array(5 - stars.length).join(',').split(',').map(function(v, i){
+		                    		return z('i.fa.fa-coffee.empty-star', {key: Math.random()})
+		                    	}) : [],
+		                    rating = stars.concat(nonstars)
+
+                        return z('div#' + i.id + ".shopCard", [
+                            z('div#image' + i.id + ".imgBox", [
+                                z('img.' + i.id + "[src="+i.photo.photo.medium.url+"]")
+                            ]),
+                            z('div#' + i.id + ".shopDeets", [
+                                z('div.shopInfo', [
+                                    z('div.shop_name', i.name),
+                                    z('br', {key: 1}),
+                                    z('div.rating', [
+                                        z('span.stars', rating)
+                                        //z('i.fa.fa-star', ")"), //will need to draw start based on rating
+                                    ]),
+                                    z('br', {key: 2}),
+                                    z('a.website'+'[href='+i.website+']', i.website)
+                                ]),
+                                z('div.shopContact', [
+                                    z('address', [i.address, z('br'), i.city+" "+i.state+" "+i.zip]),
+                                    z('span.phoneNo', i.phone)
+                                ])   
+                            ]),
+                            z('div.shopSummary',[
+                                	z('i.fa.fa-comments.fa-lg'),
+                                	z('div.summaryText',i.description)
+                            ])
+                        ])
+                    })
+                ])
             ])
         }
     });

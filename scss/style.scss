@@ -2,7 +2,6 @@
 @import "../bower_components/typeplate-starter-kit/css/_typeplate.scss";
 @import "./mixins.scss";
 @import "../bower_components/font-awesome/css/font-awesome.min.css";
-
 /**
  * BOX-SIZING
  */
@@ -10,7 +9,6 @@
 *, *:before, *:after {
     box-sizing: border-box;
 }
-
 /**
  * GRIDS
  */
@@ -21,7 +19,6 @@
     font-size: 0;
     text-align: justify;
     position: relative;
-
     & > * {
         font-size: medium;
         text-align: left;
@@ -29,7 +26,6 @@
         width: 100%;
         vertical-align: top;
     }
-
     &:after {
         display: inline-block;
         width: 100%;
@@ -37,10 +33,8 @@
         font-size: medium;
     }
 }
-
 @include gridify(2, 400);
 @include gridify(4, 600);
-
 /**
  * PACE (automatic pre-loader thingy)
  */
@@ -50,15 +44,12 @@
     user-select: none;
     transition: all 1s ease;
 }
-
 .pace-inactive {
     opacity: 0;
 }
-
 .pace-active {
     opacity: 1;
 }
-
 .pace .pace-progress {
     background: #2299dd;
     position: fixed;
@@ -69,12 +60,13 @@
     height: 2px;
     transition: all 1s ease;
 }
-
 /**
  * GENERAL
  */
 
-
+* {
+    // border: 1px solid red;
+}
 body {
     transition: opacity .25s ease;
     width: 100%;
@@ -87,11 +79,20 @@ body {
     width: 100%;
     height: 100%;
 }
-.nav {
-    background-color: brown;
-    color: white;
-    box-shadow: 0px 3px 10px #aaa;
-    font-family: 'Lobster', cursive;
+.wrapper {
+    background-color: #FFF7F0;
+}
+.header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1;
+    .nav {
+        background-color: #8A1D0A;
+        color: white;
+        box-shadow: 0px 3px 10px #333;
+        font-family: 'Lobster', cursive;
+    }
 }
 ul {
     position: relative;
@@ -113,33 +114,106 @@ ul > * {
         list-style-type: none;
     }
 }
-.main {
-    width: 80%;
-    background-color: #eee;
-    margin: 0 auto;
-    box-shadow: 0px 3px 10px #aaa;
-    // padding: .5em;
+.fa {
+    display: inline;
 }
-.shops {
-    box-shadow: 0px 3px 10px #aaa;
-    padding: .5em;
-}
-img {
-    border-radius: 10px;
-    animation: slideInFromLeft 1s ease;
-}
-.info-container {
-    font-size: 1.75em;
+.rating {
     display: inline-block;
-    vertical-align: top;
-    padding: .5em;
-    font-weight: bold;
-    animation: fadeIn 1s ease;
-    & > .address {
-        font-size: 1rem;;
+}
+.shop_name {
+    display: inline-block;
+}
+.main {
+    width: 70%;
+    margin: 0 auto;
+    .spacer {
+        width: 100%;
+        height: 5.5em;
+    }
+    .shopCard {
+        display: inline-block;
+        box-shadow: 0 1px 5px #999;
+        padding: 0.5em;
+        background-color: #f9f9f9;
+        margin: 0.25em 0;
+        border-radius: 3px;
+        width: 100%;
+        .imgBox {
+            width: 6em;
+            height: 6em;
+            overflow: hidden;
+            float: left;
+            position: relative;
+            img {
+                outline: 1px solid #ddd;
+                animation: slideInFromLeft 1s ease;
+                height: 100%;
+                position: absolute;
+                top: -1000px;
+                bottom: -1000px;
+                left: -1000px;
+                right: -1000px;
+                margin: auto;
+            }
+        }
+        .shopDeets {
+            margin-left: 6.5em;
+            height: 6em;
+            .shopInfo {
+                height: 100%;
+                // width: 60%;
+                float: left;
+                .fa-coffee{
+                    color: #733B15;
+                }
+                .empty-star {
+                    color: #aaa;
+                }
+            }
+            .shopContact {
+                height: 100%;
+                min-width: 10em;
+                float: right;
+            }
+        }
+        .shopSummary {
+            margin-top: 0.5em;
+            position: relative;
+            i {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                margin-left: 0.25em;
+                color: #733B15;
+            }
+            .summaryText {
+                margin-left: 2em;
+            }
+        }
+        .info-container {
+            font-size: 1.75em;
+            display: inline-block;
+            vertical-align: top;
+            padding: .5em;
+            font-weight: bold;
+            animation: fadeIn 1s ease;
+            & > .address {
+                font-size: 1rem;
+                ;
+            }
+        }
     }
 }
-
+@media (min-width: 900px) {
+    .main {
+        .shops {
+            img {
+                height: 30%;
+            }
+            .info-container {}
+        }
+    }
+}
 @keyframes fadeIn {
     0% {
         opacity: 0;
@@ -158,4 +232,3 @@ img {
         opacity: 1;
     }
 }
-
