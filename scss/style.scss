@@ -114,13 +114,38 @@ ul > * {
         list-style-type: none;
     }
 }
+<<<<<<< HEAD
 .fa {
     display: inline;
+=======
+.main {
+    width: 80%;
+    background-color: 570000;
+    margin: 0 auto;
+    box-shadow: 0px 3px 10px #aaa;
+    // padding: .5em;
+}
+.hours,
+.website,
+.shop-desc {
+    width: 100%;
+    font-size: 1rem;
+}
+.shops {
+    box-shadow: 0px 3px 10px #aaa;
+    padding: .5em;
+>>>>>>> 765a49a4db25757569be8caaa7682a231d3dd4bf
 }
 .rating {
     display: inline-block;
 }
+<<<<<<< HEAD
 .shop_name {
+=======
+.info-container {
+    max-width: 100%;
+    font-size: 1.75em;
+>>>>>>> 765a49a4db25757569be8caaa7682a231d3dd4bf
     display: inline-block;
 }
 .main {

@@ -30,6 +30,7 @@ function app(){
         // {url: "//maps.googleapis.com/maps/api/js?key=AIzaSyAZDjMzMY8J9tWq9hbO63UMqc0Msf9dWbM"},
         // {url: "./js/TemplateView.js"},
         {url: './js/coffeeproject.js'}
+        // {url: './js/coffeetesting.js'}
     ).then(function(){
         // if turning on JSnoX, uncommment the following line
         window.z = jsnox(React);
@@ -41,6 +42,7 @@ function app(){
         document.querySelector("html").style.opacity = 1;
         // start app?
         new Backbone.CSRouter();
+        // new Backbone.CoffeeSnobRouter();
     })
 
 }
