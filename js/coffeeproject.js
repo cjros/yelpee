@@ -2,7 +2,6 @@
 (function(exports) {
     'use strict';
 
-<<<<<<< HEAD
     Math.clamp = function(value, floor, ceil){
     	return Math.min(ceil, Math.max(floor, value))
     }
@@ -19,8 +18,6 @@
         raiting: 10
     }];
 
-=======
->>>>>>> 765a49a4db25757569be8caaa7682a231d3dd4bf
     Backbone.CSRouter = Backbone.Router.extend({
         initialize: function() {
             this.container = document.querySelector('.container');
@@ -71,10 +68,6 @@
 
     Backbone.CoffeeShopComment = Backbone.Model.extend({
         url: function() {
-<<<<<<< HEAD
-            debugger;
-            return "http://coffeesnob-api.herokuapp.com/api/shops/" + this.get("shop_id") + "/comments"
-=======
             return ' http://coffeesnob-api.herokuapp.com/api/shops/'+this.collection.shop_id+'/comments/'
         }
     });
@@ -84,7 +77,6 @@
         url: function() {
             debugger;
             return 'http://coffeesnob-api.herokuapp.com/api/shops/'+this.shop_id+'/comments/'
->>>>>>> 765a49a4db25757569be8caaa7682a231d3dd4bf
         },
         parse: function(data){
             debugger;
@@ -124,7 +116,6 @@
                         ])
                     ])
                 ]),
-<<<<<<< HEAD
                 // z('div.map', model.get('shops')[0].id),
                 z('div.main', [
                     z('div.spacer', ''),
@@ -141,11 +132,11 @@
 
                         return z('div#' + i.id + ".shopCard", [
                             z('div#image' + i.id + ".imgBox", [
-                                z('img.' + i.id + "[src="+i.photo.photo.medium.url+"]")
+                                z('a[href=#'+i.id+']', [z('img.' + i.id + "[src="+i.photo.photo.medium.url+"]")])
                             ]),
                             z('div#' + i.id + ".shopDeets", [
                                 z('div.shopInfo', [
-                                    z('div.shop_name', i.name),
+                                    z('a[href=#'+i.id+']', [z('div.shop_name', i.name)]),
                                     z('br', {key: 1}),
                                     z('div.rating', [
                                         z('span.stars', rating)
@@ -166,29 +157,6 @@
                         ])
                     })
                 ])
-=======
-                z('div.main', [z('ol', [
-                    this.props.collection.models[0].attributes.shops.map(function(i) {
-                        // console.log(i.name);
-                        	return z('a[href=#'+i.id+']', [
-                                z('li#' + i.id+".shops", [
-                        		z('img.'+i.id+(i.photo.photo.medium.url ? '[src='+i.photo.photo.medium.url+']' : '[alt='+i.name+']')),
-                        		z('div.info-container', [
-                        			z('div.shop_name', i.name),
-                        			z('div.rating', [
-                        				z('span.stars', i.rating),
-                        				z('i.fa.fa-star')
-                        			]),
-                                    z('div.hours', 'Business Hours: ' + i.hours),
-                                    z('div.website', i.website),
-                                    z('div.shop-desc', i.description),
-                        			z('pre.address', 'Address:\n'+ i.address + "\n" + i.city + "," + i.state +" " + i.zip)
-                        		])
-                        	])
-                        ])
-                    })])]
-                )
->>>>>>> 765a49a4db25757569be8caaa7682a231d3dd4bf
             ])
         }
     });
