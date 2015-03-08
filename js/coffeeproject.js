@@ -185,22 +185,12 @@
     });
 
     Backbone.DetailView = React.createClass({
-        getInitialState: function() {
-            return {}
-        },
-        getDefaultProps: function() {
-            return {
-                collection: null
-            };
-        },
+        displayName: 'DetailView',
         componentWillMount: function() { //what happens when the object is attached to the dom similar to initialize
             var self = this;
             this.props.collection && this.props.collection.on("change reset add remove", function() {
                 self.forceUpdate() //setup listener and then force update on collection change
             })
-        },
-        componentWillUnmount: function() {
-            this.props.collection && this.props.collection.off("change reset add remove")
         },
         _addComment: function(e){
             e.preventDefault();
@@ -213,20 +203,8 @@
 
             var self = this;
             this.props.collection.create(data)
-        
-
-
-            // var newComment = new Backbone.CoffeeShopComment(data)
-
-            // var self = this;
-            // newComment.save().then(function(){
-            //     //WHY ISNT THIS SHIT RE-RENDERING?
-            //     //comment actually gets added but dev tools shows an error
-            //     //must manually refresh for the comment to even show
-
-            //     //EDIT: SHIT ISNT EVEN POSTING ANYMORE
-            //     self.props.collection.fetch()
-            // })
+            var form = document.querySelector('.comment-box');
+            form.reset();
         },
         render: function() {
         	var mapAddress = "https://maps.googleapis.com/maps/api/staticmap?center=2201+Washington+Ave,Houston+TX&zoom=16&size=400x400&markers=2201+Washington+Ave,Houston+TX";
@@ -247,14 +225,14 @@
                     z('form.comment-box', {
                         onSubmit: this._addComment
                     }, [
-                        z('input:text@addComment[placeholder=add a new comment]'),
+                        z('input:text@addComment'),
                         z('button', 'submit!')
                     ]),
                     z('ol', [
-                        this.props.collection.map(function(i) {
-                            return z('li#' + i.id, [
-                                z('div.info-container', [
-                                    z('div.shop_name', i.get('message'))
+                        this.props.collection.map(function(d, i, a) {
+                            return z('li#' + d.id, {key: i}, [
+                                z('div.info-container', {key: i}, [
+                                    z('div.shop_name', {key: i}, d.get('message'))
                                 ])
                             ])
 
