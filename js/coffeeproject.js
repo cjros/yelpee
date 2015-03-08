@@ -6,17 +6,9 @@
     	return Math.min(ceil, Math.max(floor, value))
     }
 
-    var collectionData = [{
-        name: "Catalina",
-        address: "123 Fake St",
-        photo_url: "http://i.imgur.com/z2eifSm.jpg",
-        rating: 10
-    }, {
-        name: "Tout Suite",
-        address: "123 Fake St",
-        photo_url: "http://i.imgur.com/z2eifSm.jpg",
-        raiting: 10
-    }];
+    var webify = function(string){
+    	return string.replace(/ /g, "+")
+    }
 
     Backbone.CSRouter = Backbone.Router.extend({
         initialize: function() {
@@ -25,6 +17,9 @@
             Backbone.history.start();
         },
         routes: {
+        	'home': 'home',
+        	'about': 'about',
+        	'contact': 'contact',
             ':shop_id': 'shopper',
             '*default': 'home'
         },
@@ -39,6 +34,12 @@
             this.shopsCollection.fetch().then(function(data) {
                 React.render(self.homePage, self.container);
             })
+        },
+        about: function() {
+        	console.log("Rendering About Us");
+        },
+        contact: function() {
+        	console.log("Rendering Contact Page");
         },
         shopper: function(shop_id){
             var self = this;
@@ -75,14 +76,46 @@
     Backbone.CoffeeShopCommentList = Backbone.Collection.extend({
         model: Backbone.CoffeeShopComment,
         url: function() {
-            debugger;
+            // debugger;
             return 'http://coffeesnob-api.herokuapp.com/api/shops/'+this.shop_id+'/comments/'
         },
         parse: function(data){
-            debugger;
+            // debugger;
             return data.comments;
         }
     });
+
+    Backbone.CoffeeShopVote = Backbone.Model.extend({
+    	url: function() {
+    		return 'http://coffeesnob-api.herokuapp.com/api/shops/'+this.get('shop_id')+'/votes';
+    	}
+    });
+
+    Backbone.HeaderComponent = React.createClass({
+		displayName: 'HeaderComponent',
+		render: function() {
+			return z('div.header', [
+				z('div.nav', [
+					z('ul', [
+						z('a[href=#home]', [
+							z('li.home', 'CoffeeSnob')]),
+						z('a[href=#about]', [
+							z('li.about', 'About')]),
+						z('a[href=#contact]', [
+							z('li.contact', 'Contact')
+						])
+					])
+				])
+			])
+		}
+	});
+
+	Backbone.ShopCard = React.createClass({
+		displayName: 'ShopCard',
+		render: function() {
+			return ""
+		}
+	});
 
     Backbone.LandingView = React.createClass({
         getInitialState: function() {
@@ -105,17 +138,7 @@
         render: function() {
             console.log(this.props.collection)
             return z('div.wrapper', [
-                z('div.header', [
-                    z('div.nav', [
-                        z('ul', [
-                            z('li#snob', 'coffeeSnob'),
-                            z('li#home', 'Home'),
-                            z('li#about', 'About'),
-                            z('li#sign-in', 'Sign In'),
-                            z('li#register', 'Register')
-                        ])
-                    ])
-                ]),
+                z(Backbone.HeaderComponent),
                 // z('div.map', model.get('shops')[0].id),
                 z('div.main', [
                     z('div.spacer', ''),
@@ -206,10 +229,21 @@
             // })
         },
         render: function() {
+        	var mapAddress = "https://maps.googleapis.com/maps/api/staticmap?center=2201+Washington+Ave,Houston+TX&zoom=16&size=400x400&markers=2201+Washington+Ave,Houston+TX";
+        	var minMapUrl = "https://maps.googleapis.com/maps/api/staticmap?center=2201+Washongton+Ave,Houston+TX&zoom=16&size=400x400";
+        	var testURL = "http://i.imgur.com/kCrDFvC.jpg";
+        	var x = "https://maps.googleapis.com/maps/api/staticmap?center=San+Francisco,CA&zoom=10&size=400x400";
             return z('div.wrapper', [
+            	z(Backbone.HeaderComponent),
+
                 z('div.main', [
-                    z('div.shop-details', 'INFO goes here'),
-                    z('div.map', 'a map should be here'),
+                	z('div.spacer', ''),
+                	z('div.details-box', [
+                		z('div.shop-details', 'INFO goes here'),
+                    	z('div.map', [
+                    		z('img[src='+']') //DOES NOT LIKE EXTRA EQUAL SIGNS
+                    	]),
+                	]),
                     z('form.comment-box', {
                         onSubmit: this._addComment
                     }, [
