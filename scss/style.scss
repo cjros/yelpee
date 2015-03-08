@@ -65,7 +65,7 @@
  */
 
 * {
-    border: 1px solid red;
+    // border: 1px solid red;
 }
 body {
     transition: opacity .25s ease;
@@ -142,11 +142,7 @@ ul > * {
 }
 .details-box {
     .shop-details {
-        width: 50%;
-        display: inline-block;
-    }
-    .map {
-        width: 50%;
+        width: 100%;
         display: inline-block;
     }
 }
@@ -237,6 +233,21 @@ ul > * {
                 font-size: 1rem;
                 ;
             }
+        }
+    }
+    .comment-box {
+        display: inline-block;
+        box-shadow: 0 1px 5px #999;
+        padding: 0.5em;
+        background-color: #f9f9f9;
+        margin: 0.25em 0;
+        border-radius: 3px;
+        width: 100%;
+        .userComment {
+            width: 100%;
+        }
+        button {
+            float: right;
         }
     }
 }
