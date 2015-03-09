@@ -274,7 +274,7 @@
                         onSubmit: this._addComment
                     }, [
                         z('textarea.userComment@addComment[placeholder=add a new comment]'),
-                        z('button', 'submit!'),
+                        z('button[type=submit]', 'submit!'),
                         z('ol', [
                             this.props.collection.map(function(d, i, a) {
                             return z('li#' + d.id, {key: i}, [
