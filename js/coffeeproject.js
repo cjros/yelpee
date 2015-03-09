@@ -191,14 +191,7 @@
     });
 
     Backbone.DetailView = React.createClass({
-        getInitialState: function() {
-            return {}
-        },
-        getDefaultProps: function() {
-            return {
-                collection: null
-            };
-        },
+        displayName: 'DetailView',
         componentWillMount: function() { //what happens when the object is attached to the dom similar to initialize
             var self = this;
             this.props.collection && this.props.collection.on("change reset add remove", function() {
@@ -210,7 +203,7 @@
         },
         _addComment: function(e) {
             e.preventDefault();
-            // debugger;
+            debugger;
             console.log(this.props)
             var comment = this.refs.addComment.getDOMNode().value;
             var data = {
@@ -219,7 +212,8 @@
 
             var self = this;
             this.props.collection.create(data)
-
+            var form = document.querySelector('.comment-box');
+            form.reset();
         },
         render: function() {
 
@@ -273,8 +267,7 @@
                                 z('i.fa.fa-comments.fa-lg'),
                                 z('div.summaryText', shop.description)
                             ])
-
-                        ]),
+                        ])
                     ]),
 
                     z('form.comment-box', {
@@ -283,11 +276,12 @@
                         z('textarea.userComment@addComment[placeholder=add a new comment]'),
                         z('button', 'submit!'),
                         z('ol', [
-                            this.props.collection.map(function(i) {
-                                return z('li#' + i.id, [
-                                    z('div.info-container', [
-                                        z('div.shop_name', i.get('message'))
-                                    ])
+                            this.props.collection.map(function(d, i, a) {
+                            return z('li#' + d.id, {key: i}, [
+                                z('div.info-container', {key: i}, [
+                                    z('div.shop_name', {key: i}, d.get('message'))
+                                ])
+
                                 ])
                             })
                         ])
