@@ -115,6 +115,24 @@
         }
     });
 
+    Backbone.RatingComponent = React.createClass({
+    	displayName: 'RatingComponent',
+    	render: function() {
+    		return z('span.starRating',[
+    			z('input[id=rating5][type=radio][name=rating][value=5]'),
+    			z('label[for=rating5]','5'),
+    			z('input[id=rating4][type=radio][name=rating][value=4]'),
+    			z('label[for=rating4]','4'),
+    			z('input[id=rating3][type=radio][name=rating][value=3]'),
+    			z('label[for=rating3]','3'),
+    			z('input[id=rating2][type=radio][name=rating][value=2]'),
+    			z('label[for=rating2]','2'),
+    			z('input[id=rating1][type=radio][name=rating][value=1]'),
+    			z('label[for=rating1]','1')
+    		])
+    	}
+    })
+
     Backbone.LandingView = React.createClass({
         getInitialState: function() {
             return {}
@@ -215,6 +233,20 @@
             var form = document.querySelector('.comment-box');
             form.reset();
         },
+        _addVote: function(e) {
+
+        	// NO. THIS DOES NOT WORK. NEEDS TO BE IN THE SAME AS ADD COMMENT
+        	// ALSO NEEDS A CLASS WITH A URL DEFINITION
+
+        	e.preventDefault();
+        	debugger;
+        	console.log(this.props);
+        	var vote = this.refs.addVote.getDOMNode().value;
+        	var data = {
+        		rating: vote
+        	}
+        	form.reset();
+        },
         render: function() {
 
             var shop = this.props.shop.get('shop');
@@ -273,6 +305,8 @@
                     z('form.comment-box', {
                         onSubmit: this._addComment
                     }, [
+                    	z(Backbone.RatingComponent),
+                   
                         z('textarea.userComment@addComment[placeholder=add a new comment]'),
                         z('button[type=submit]', 'submit!'),
                         z('ol', [
